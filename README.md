@@ -9,5 +9,5 @@ Implementations of the algorithms proposed at Sutton and Barton book, Reinforcem
 4) Policy iteration
 5) Value iteration
 
-![GitHub Logo](/images/logo.png)
+![GitHub Logo](/Tabular Solution Methods/Multi-armed Bandits/Simple Bandit Algorith.png)
 Format: ![Alt Text](url)
