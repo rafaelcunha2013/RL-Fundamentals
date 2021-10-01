@@ -8,3 +8,6 @@ Implementations of the algorithms proposed at Sutton and Barton book, Reinforcem
 3) Iterative policy evaluation
 4) Policy iteration
 5) Value iteration
+
+![GitHub Logo](/images/logo.png)
+Format: ![Alt Text](url)
