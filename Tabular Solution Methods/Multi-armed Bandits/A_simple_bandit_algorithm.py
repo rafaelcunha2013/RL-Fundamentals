@@ -22,6 +22,7 @@ class Bandit:
 def simple_bandit_algorithm(k):
     bandit = Bandit(k)
     q = np.zeros(k, dtype=float)
+    # q = np.ones(k)*2 # Using UBC
     n = np.zeros(k, dtype=float)
     epsilon = 0.3
     for _ in range(1000000):
