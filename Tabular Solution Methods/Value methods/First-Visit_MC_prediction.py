@@ -10,8 +10,9 @@ from numpy.random import default_rng
 import gym
 from collections import defaultdict
 import pandas as pd
+from Utilities import plot_blackjack_values
 
-
+'''
 class BlackJack(gym.Env):
     def __init__(self):
         self.action_space.n = 4
@@ -32,6 +33,18 @@ class BlackJack(gym.Env):
         self.state = 1
         self.done = False
         return self.state
+'''
+
+
+def count_hand(state):
+    ace = 0
+    if state[2]:
+        if state[2] + 11 <= 21:
+            ace = 11
+        else:
+            ace = 1
+    hand = state[0] + ace
+    return hand
 
 
 class Agent:
@@ -39,10 +52,17 @@ class Agent:
         self.policy = pi
         self.env = env
 
-    def decision(self, state):
-        probs = self.policy[state[0]]
-        rng = default_rng()
-        action = rng.choice(np.arange(self.env.action_space.n), p=probs)
+    @staticmethod
+    def decision(state):
+        # probs = self.policy[state[0]]
+        # rng = default_rng()
+        # Actions: 'hit=1' or 'stick=0'
+        # action = rng.choice(np.arange(self.env.action_space.n), p=probs)
+        hand = count_hand(state)
+        if hand > 19:
+            action = 0
+        else:
+            action = 1
         return action
 
 
@@ -66,10 +86,9 @@ def generate_policy(env):
     return pi
 
 
-def first_visit_mc(env, agent, episodes):
+def first_visit_mc(env, agent, episodes, gamma=1):
     value = defaultdict(lambda: 0)
     returns = defaultdict(lambda: [])
-    gamma = 0.9
 
     for _ in range(episodes):
         history = generate_episode(env, agent)
@@ -84,15 +103,16 @@ def first_visit_mc(env, agent, episodes):
     return value
 
 
-
 if __name__ == "__main__":
     # env = BlackJack
     env = gym.make('Blackjack-v1')
     pi = generate_policy(env)
     agent = Agent(pi, env)
     history = generate_episode(env, agent)
-    value = first_visit_mc(env, agent, 4000)
+    value = first_visit_mc(env, agent, 500000)
     df = pd.DataFrame(list(value.items()), columns = ['State', 'value'])
+    value_plot = dict((k, v) for k, v in value.items())
+    plot_blackjack_values(value_plot)
 
 
 
